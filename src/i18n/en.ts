@@ -209,7 +209,7 @@ export const en = {
     core: {
       tag: '01 / Core courses',
       heading: 'Pick the shape that fits.',
-      intro: 'Six paths into the center. Hover any card to see what each one is for.',
+      intro: 'Seven paths into the center. Hover any card to see what each one is for.',
       trackLabel: 'Core courses',
       enquire: 'Enquire',
       cards: [
@@ -249,6 +249,12 @@ export const en = {
           meta: 'All levels',
           alt: 'Students learning Spanish together',
         },
+        {
+          title: 'Reading Club',
+          text: 'A monthly book club that turns reading into a habit. We pick short books and stories together, then talk them through over coffee.',
+          meta: 'All levels',
+          alt: 'Students in a reading club discussing a book',
+        },
       ],
     },
     trainings: {
@@ -261,8 +267,10 @@ export const en = {
         { title: 'Cambridge C1 Advanced', weeks: '14 weeks', meta: 'Exam prep · English' },
         { title: 'IELTS Intensive',       weeks: '8 weeks',  meta: 'Exam prep · English' },
         { title: 'TOEFL Preparation',     weeks: '10 weeks', meta: 'Exam prep · English' },
-        { title: 'DELF B2',               weeks: '12 weeks', meta: 'Exam prep · French' },
-        { title: 'DELE B2',               weeks: '12 weeks', meta: 'Exam prep · Spanish' },
+        { title: 'Francais 1',               weeks: '10 weeks', meta: 'Exam prep · French' },
+        { title: 'Francais 2',               weeks: '10 weeks', meta: 'Exam prep · French' },
+        { title: 'Spanish 1',               weeks: '10 weeks', meta: 'Exam prep · Spanish' },
+        { title: 'Spanish 2',               weeks: '10 weeks', meta: 'Exam prep · Spanish' },
         { title: 'Business English',      weeks: '6 weeks',  meta: 'Professional' },
         { title: 'Conversation Club',     weeks: 'Rolling',  meta: 'All languages' },
       ],

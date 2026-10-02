@@ -1,7 +1,16 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
-export function Track({ children, label = 'Scroll the story' }: { children: ReactNode; label?: string }) {
+export function Track({
+  children,
+  label = 'Scroll the story',
+  mobileWrap = true,
+}: {
+  children: ReactNode;
+  label?: string;
+  /** When false, touch devices get a plain scroll (no infinite wrap). Desktop keeps wrap. */
+  mobileWrap?: boolean;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
   const startX = useRef(0);
@@ -11,10 +20,20 @@ export function Track({ children, label = 'Scroll the story' }: { children: Reac
 
   const items = Array.isArray(children) ? children : [children];
 
-  // ── Wrap-around: keep scrollLeft inside the middle "set" ─────────
+  // Detect touch-primary device once. Good enough for a marketing site.
+  const isTouchDevice = useRef(false);
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    isTouchDevice.current = window.matchMedia('(hover: none)').matches;
+  }, []);
+
+  // ── Wrap-around: only when infinite is enabled ────────────────────
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
+    const infinite = !(isTouchDevice.current && mobileWrap === false);
+    if (!infinite) return;
 
     const jumpToMiddle = () => {
       const setWidth = el.scrollWidth / 3;
@@ -39,9 +58,9 @@ export function Track({ children, label = 'Scroll the story' }: { children: Reac
       clearTimeout(t);
       el.removeEventListener('scroll', onScroll);
     };
-  }, [items.length]);
+  }, [items.length, mobileWrap]);
 
-  // ── Global listeners while dragging (no setPointerCapture) ──────
+  // ── Mouse-only drag ───────────────────────────────────────────────
   useEffect(() => {
     if (!dragging) return;
 
@@ -71,14 +90,15 @@ export function Track({ children, label = 'Scroll the story' }: { children: Reac
   const scroll = (dir: number) => {
     const el = ref.current;
     if (!el) return;
-    // Cards live inside .horizontal-track-set → go two levels deep
     const firstCard = el.firstElementChild?.firstElementChild as HTMLElement | null;
-    const step = (firstCard?.offsetWidth ?? 430) + 18; // + gap
+    const step = (firstCard?.offsetWidth ?? 430) + 18;
     el.scrollBy({ left: dir * step, behavior: 'smooth' });
   };
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
-    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    // Native touch scroll already handles this — only capture mouse drags.
+    if (e.pointerType !== 'mouse') return;
+    if (e.button !== 0) return;
     const el = ref.current;
     if (!el) return;
     isDragging.current = true;
@@ -109,11 +129,18 @@ export function Track({ children, label = 'Scroll the story' }: { children: Reac
         onPointerDown={onPointerDown}
         onClickCapture={onClickCapture}
       >
-        {[0, 1, 2].map((setIdx) => (
-          <div key={setIdx} className="horizontal-track-set" aria-hidden={setIdx !== 1}>
+        {mobileWrap === false ? (
+          // Single set: no wrap, no duplicate clones.
+          <div className="horizontal-track-set">
             {items}
           </div>
-        ))}
+        ) : (
+          [0, 1, 2].map((setIdx) => (
+            <div key={setIdx} className="horizontal-track-set" aria-hidden={setIdx !== 1}>
+              {items}
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

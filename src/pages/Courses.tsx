@@ -10,29 +10,27 @@ type Training = { title: string; weeks: string; meta: string };
 type Level = { code: string; name: string; desc: string };
 
 // Images stay hardcoded — they're data, not copy.
-// Order matters: index 0..5 matches the 6 course cards in order.
 const IMAGES = [
-  'https://franklinis.com/wp-content/uploads/2024/05/Happy-kids-at-summer-camp-1-scaled.jpg',   // 0 — School curriculum
-  '/adult-conversation.jpg',   // 1 — General English
-  '/classroom-students.jpg',   // 2 — Exam preparation
-  '/adult-conversation.jpg',   // 3 — Business & Professional
-  '/adult-conversation.jpg',   // 4 — French
-  '/classroom-students.jpg',   // 5 — Spanish
+  'https://images.unsplash.com/photo-1594608661623-aa0bd3a69d98?w=1200&q=80',  // 0 — School curriculum
+  'https://images.unsplash.com/photo-1543269865-cbf427effbad?w=1200&q=80',    // 1 — General English
+  'https://images.unsplash.com/photo-1495446815901-a7297e633e8d?w=1200&q=80',  // 2 — Exam preparation
+  'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1200&q=80',  // 3 — Business & Professional
+  'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1200&q=80',  // 4 — French
+  'https://images.unsplash.com/photo-1543783207-ec64e4d95325?w=1200&q=80',     // 5 — Spanish
+  'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=1200&q=80',  // 6 — Reading Club
 ];
 
 const LEVEL_WIDTHS = ['17%', '32%', '50%', '67%', '84%', '100%'];
 
-// Static class map — Tailwind needs literal strings to generate them.
 const COLOR_CLASSES: Record<string, string> = {
   yellow: 'bg-[var(--yellow)] text-[var(--ink)]',
   orange: 'bg-[var(--orange)] text-[var(--ink)]',
   green:  'bg-[var(--green)] text-[var(--ink)]',
   blue:   'bg-[var(--blue)] text-[var(--paper)]',
-  purple: 'bg-[var(--purple)] text-[var(--ink)]',
+  pink:   'bg-[var(--pink)] text-[var(--ink)]',
 };
 
-// 6-card color rotation. Each course gets a distinct block of color.
-const COLOR_ORDER = ['yellow', 'orange', 'green', 'blue', 'purple', 'yellow'] as const;
+const COLOR_ORDER = ['yellow', 'orange', 'green', 'blue', 'pink', 'yellow', 'orange'] as const;
 
 export default function Courses() {
   const t = useT();
@@ -66,7 +64,7 @@ export default function Courses() {
               <p>{t('courses.core.intro')}</p>
             </div>
 
-            <Track label={t('courses.core.trackLabel')}>
+            <Track label={t('courses.core.trackLabel')} mobileWrap={false}>
               {cards.map((c, i) => {
                 const color = COLOR_ORDER[i] ?? 'yellow';
                 const image = IMAGES[i] ?? IMAGES[0];
@@ -89,8 +87,8 @@ export default function Courses() {
                       {c.title}
                     </h3>
 
-                    <div className="h-[240px] shrink-0 overflow-hidden rounded-2xl border border-[var(--ink)] bg-[var(--paper)] transition-[height] duration-[550ms] ease-[cubic-bezier(.2,.75,.2,1)] group-hover:h-[120px] [@media(hover:none)]:h-[180px] max-[560px]:h-[180px]">
-                      <img src={image} alt={c.alt} className="block h-full w-full object-cover" />
+                    <div className="h-[320px] shrink-0 overflow-hidden rounded-2xl border border-[var(--ink)] bg-[var(--paper)] transition-[height] duration-[550ms] ease-[cubic-bezier(.2,.75,.2,1)] group-hover:h-[120px] [@media(hover:none)]:h-[180px] max-[560px]:h-[180px]">
+                      <img src={image} alt={c.alt} className="block h-full w-full object-cover" loading="lazy" />
                     </div>
 
                     <div className="flex min-h-0 flex-1 flex-col gap-2 translate-y-2.5 opacity-0 transition-[opacity,transform] duration-[400ms] ease-out delay-[120ms] group-hover:translate-y-0 group-hover:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100 max-[560px]:translate-y-0 max-[560px]:opacity-100">

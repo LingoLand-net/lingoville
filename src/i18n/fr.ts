@@ -206,10 +206,10 @@ export const fr = {
     titleB: ' vie.',
     description:
       'L’anglais, le français et l’espagnol en petits groupes — tous niveaux, tous âges, avec préparation d’examens, cours de business et pratique de la conversation.',
-    core: {
+       core: {
       tag: '01 / Cours principaux',
       heading: 'Choisissez la forme qui vous convient.',
-      intro: 'Six chemins dans le centre. Survolez une carte pour en savoir plus.',
+      intro: 'Sept chemins dans le centre. Survolez une carte pour en savoir plus.',
       trackLabel: 'Cours principaux',
       enquire: 'Se renseigner',
       cards: [
@@ -248,6 +248,12 @@ export const fr = {
           text: 'Tous les niveaux d’espagnol, de A1 à C2. Un espagnol réel et utile, pour les voyages, le travail et la vie quotidienne.',
           meta: 'Tous niveaux',
           alt: 'Des élèves qui apprennent l’espagnol ensemble',
+        },
+        {
+          title: 'Club de lecture',
+          text: 'Un club de lecture mensuel qui transforme la lecture en habitude. On choisit ensemble des livres et des nouvelles courts, puis on en parle autour d’un café.',
+          meta: 'Tous niveaux',
+          alt: 'Des élèves dans un club de lecture qui discutent d’un livre',
         },
       ],
     },
