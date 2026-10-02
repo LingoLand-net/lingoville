@@ -3,11 +3,11 @@ import { Link } from 'wouter';
 import { Menu, X } from 'lucide-react';
 import { Brand } from './Brand';
 import { getNavItems, getUtilityNav } from '@/lib/nav';
-import { useT } from '@/i18n';
+import { useLanguage } from '@/i18n';
 
 export function Header() {
   const [open, setOpen] = useState(false);
-  const t = useT();
+  const { t, lang, toggleLang } = useLanguage();
   const navItems = getNavItems(t);
   const utilityNav = getUtilityNav(t);
 
@@ -16,14 +16,24 @@ export function Header() {
   return (
     <header className="mobile-bar">
       <Brand />
-      <button
-        className="track-control"
-        onClick={() => setOpen(!open)}
-        aria-label={t('nav.menuAria')}
-        data-testid="button-menu"
-      >
-        {open ? <X size={18} /> : <Menu size={18} />}
-      </button>
+      <div className="mobile-bar-actions">
+        <button
+          type="button"
+          className="mobile-lang-btn"
+          onClick={toggleLang}
+          aria-label={lang === 'en' ? t('nav.toggleAriaToFr') : t('nav.toggleAriaToEn')}
+        >
+          {lang === 'en' ? t('nav.toggleToFr') : t('nav.toggleToEn')}
+        </button>
+        <button
+          className="track-control"
+          onClick={() => setOpen(!open)}
+          aria-label={t('nav.menuAria')}
+          data-testid="button-menu"
+        >
+          {open ? <X size={18} /> : <Menu size={18} />}
+        </button>
+      </div>
 
       {open && (
         <nav className="mobile-menu">
