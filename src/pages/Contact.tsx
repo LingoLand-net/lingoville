@@ -6,6 +6,11 @@ import { useT } from '@/i18n';
 
 type FaqItem = { category: string; q: string; a: string };
 
+const PHONES = [
+  { display: '+216 22 571 291', tel: '+21622571291' },
+  { display: '+216 95 883 871', tel: '+21695883871' },
+];
+
 export default function Contact() {
   const t = useT();
   const faqs = t('contact.faq.items') as FaqItem[];
@@ -65,7 +70,11 @@ export default function Contact() {
                 <div className="contact-map-info">
                   <div className="mono">{t('contact.mapInfoTag')}</div>
                   <strong>{t('contact.mapInfoEmail')}</strong>
-                  <span>{t('contact.mapInfoPhone')}</span>
+                  {PHONES.map((p) => (
+                    <a key={p.tel} href={`tel:${p.tel}`} className="contact-map-phone">
+                      {p.display}
+                    </a>
+                  ))}
                   <div className="social-row">
                     <a href="https://card.tccards.tn/@lingo-ville" target="_blank" rel="noopener noreferrer" aria-label="Social card">◎</a>
                     <span>f</span>

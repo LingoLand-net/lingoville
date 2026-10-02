@@ -108,8 +108,16 @@ export const en = {
       prevAria: 'Previous review',
       nextAria: 'Next review',
     },
+    verification: {
+      tag: '03 / Trust & verification',
+      heading: 'Certificate verification',
+      body: 'Employers and institutions can verify a Lingo Ville certificate directly on the verification page — no account needed.',
+      cta: 'Open verification',
+      gifAlt: 'Preview of the certificate verification page in action',
+      mobileCta: 'Open Certificate ↗',
+    },
     leaveReview: {
-      tag: '03 / Share your story',
+      tag: '04 / Share your story',
       heading: 'Tell us how it went.',
       intro: 'Students and parents — we would love to hear what changed for you. Reviews are read by our team before they go anywhere public.',
       points: [
@@ -286,7 +294,6 @@ export const en = {
   contact: {
     mapInfoTag: 'Contact / 04',
     mapInfoEmail: 'hey@lingo-ville.com',
-    mapInfoPhone: '+216 00 000 000',
     openMaps: 'Open in Google Maps',
     mapsAria: 'Open Lingoville Language Centre in Google Maps',
     form: {

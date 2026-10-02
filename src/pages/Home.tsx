@@ -206,6 +206,66 @@ function ReviewsCarousel() {
   );
 }
 
+function CertificateVerification() {
+  const t = useT();
+  const certUrl = 'https://cert.lingo-ville.com';
+
+  return (
+    <Reveal>
+      <section className="section-tight verification-section">
+        <div className="container">
+          <div className="verification-grid">
+            {/* Left: copy + CTA */}
+            <div className="verification-copy">
+              <div className="mono section-tag">{t('home.verification.tag')}</div>
+              <h2 className="display verification-heading">
+                {t('home.verification.heading')}
+              </h2>
+              <p className="verification-body">
+                {t('home.verification.body')}
+              </p>
+              <div className="button-row">
+                <a
+                  href={certUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="button button-blue"
+                >
+                  {t('home.verification.cta')} <ArrowUpRight size={17} />
+                </a>
+              </div>
+            </div>
+
+            {/* Right: GIF + bouncing arrow pointing to the Certificate nav button */}
+            <div className="verification-demo">
+              <div className="verification-gif-wrap">
+                <img
+                  src="/cert-verify-demo.gif"
+                  alt={t('home.verification.gifAlt')}
+                  className="verification-gif"
+                  loading="lazy"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Mobile-only fallback: no sidebar visible, so show a button */}
+          <div className="verification-mobile-hint">
+            <a
+              href={certUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="button button-blue"
+            >
+              {t('home.verification.mobileCta')}
+            </a>
+          </div>
+        </div>
+      </section>
+    </Reveal>
+  );
+}
+
 function LeaveReview() {
   const t = useT();
   const points = t('home.leaveReview.points') as string[];
@@ -342,6 +402,7 @@ export default function Home() {
         <HeroSlider />
         <QuickAbout />
         <ReviewsCarousel />
+        <CertificateVerification />
         <LeaveReview />
         <CtaBand />
       </main>
