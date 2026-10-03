@@ -26,7 +26,7 @@ const COLOR_CLASSES: Record<string, string> = {
   yellow: 'bg-[var(--yellow)] text-[var(--ink)]',
   orange: 'bg-[var(--orange)] text-[var(--ink)]',
   green:  'bg-[var(--green)] text-[var(--ink)]',
-  blue:   'bg-[var(--blue)] text-[var(--paper)]',
+  blue:   'bg-[var(--teal)] text-[var(--paper)]',
   pink:   'bg-[var(--pink)] text-[var(--ink)]',
 };
 
@@ -73,7 +73,7 @@ export default function Courses() {
                   <article
                     key={i}
                     className={[
-                      'group snap-start',
+                      'group snap-start select-none',
                       'flex h-[420px] shrink-0 grow-0 flex-col gap-3',
                       'basis-[clamp(280px,24vw,360px)]',
                       'overflow-hidden rounded-[25px] border border-[var(--ink)] p-5',
@@ -88,7 +88,13 @@ export default function Courses() {
                     </h3>
 
                     <div className="h-[320px] shrink-0 overflow-hidden rounded-2xl border border-[var(--ink)] bg-[var(--paper)] transition-[height] duration-[550ms] ease-[cubic-bezier(.2,.75,.2,1)] group-hover:h-[120px] [@media(hover:none)]:h-[180px] max-[560px]:h-[180px]">
-                      <img src={image} alt={c.alt} className="block h-full w-full object-cover" loading="lazy" />
+                      <img
+                        src={image}
+                        alt={c.alt}
+                        draggable={false}
+                        className="pointer-events-none block h-full w-full select-none object-cover [-webkit-user-drag:none]"
+                        loading="lazy"
+                      />
                     </div>
 
                     <div className="flex min-h-0 flex-1 flex-col gap-2 translate-y-2.5 opacity-0 transition-[opacity,transform] duration-[400ms] ease-out delay-[120ms] group-hover:translate-y-0 group-hover:opacity-100 [@media(hover:none)]:translate-y-0 [@media(hover:none)]:opacity-100 max-[560px]:translate-y-0 max-[560px]:opacity-100">
@@ -98,6 +104,7 @@ export default function Courses() {
                       <p className="m-0 line-clamp-4 text-[.85rem] leading-[1.45]">{c.text}</p>
                       <Link
                         href="/contact"
+                        draggable={false}
                         className="mt-auto inline-flex shrink-0 items-center gap-1.5 self-start py-1 text-[.78rem] font-bold tracking-[-0.01em] transition-[gap] duration-200 group-hover:gap-2.5"
                       >
                         {t('courses.core.enquire')} <ArrowUpRight size={15} />

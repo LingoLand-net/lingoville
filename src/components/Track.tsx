@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 
+const EASE_OUT_CUBIC = (t: number) => 1 - Math.pow(1 - t, 3);
+
 export function Track({
   children,
   label = 'Scroll the story',
@@ -14,62 +16,106 @@ export function Track({
   const ref = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
   const startX = useRef(0);
-  const startScroll = useRef(0);
+  const lastX = useRef(0);
   const didMove = useRef(false);
   const [dragging, setDragging] = useState(false);
 
+  // Infinite wrap state
+  const setWidthRef = useRef(0);
+  const animFrameRef = useRef<number | null>(null);
+
   const items = Array.isArray(children) ? children : [children];
 
-  // Detect touch-primary device once. Good enough for a marketing site.
   const isTouchDevice = useRef(false);
   useEffect(() => {
     if (typeof window === 'undefined') return;
     isTouchDevice.current = window.matchMedia('(hover: none)').matches;
   }, []);
 
-  // ── Wrap-around: only when infinite is enabled ────────────────────
+  // ── Infinite wrap: setup + scroll listener ───────────────────────
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
-    const infinite = !(isTouchDevice.current && mobileWrap === false);
-    if (!infinite) return;
+    // Only enable infinite wrap when we actually rendered 3 sets.
+    // (mobileWrap === false renders a single set — nothing to wrap to.)
+    const sets = el.querySelectorAll<HTMLElement>('.horizontal-track-set');
+    if (sets.length < 3) return;
 
-    const jumpToMiddle = () => {
-      const setWidth = el.scrollWidth / 3;
-      el.scrollLeft = setWidth;
+    const measureSetWidth = () => {
+      const all = el.querySelectorAll<HTMLElement>('.horizontal-track-set');
+      if (all.length < 2) return 0;
+      // Distance between consecutive sets = one full set incl. trailing gap.
+      // This is what makes the jump invisible.
+      return all[1].offsetLeft - all[0].offsetLeft;
     };
-    const raf = requestAnimationFrame(jumpToMiddle);
-    const t = setTimeout(jumpToMiddle, 100);
+
+    const alignToMiddle = () => {
+      const w = measureSetWidth();
+      if (w <= 0) return;
+      setWidthRef.current = w;
+      el.scrollLeft = w;
+    };
+
+    // Wait for layout + fonts/images.
+    const raf = requestAnimationFrame(() => requestAnimationFrame(alignToMiddle));
+    const t1 = window.setTimeout(alignToMiddle, 100);
+    const t2 = window.setTimeout(alignToMiddle, 400);
+
+    // Re-measure when the track's size changes (font load, resize, etc.)
+    const ro = new ResizeObserver(() => {
+      const prev = setWidthRef.current;
+      const next = measureSetWidth();
+      if (next <= 0) return;
+      if (prev <= 0) {
+        setWidthRef.current = next;
+        el.scrollLeft = next;
+      } else if (Math.abs(next - prev) > 1) {
+        // Preserve the user's relative position across the middle set.
+        const ratio = el.scrollLeft / prev;
+        setWidthRef.current = next;
+        el.scrollLeft = ratio * next;
+      }
+    });
+    ro.observe(el);
 
     const onScroll = () => {
-      const setWidth = el.scrollWidth / 3;
-      if (setWidth === 0) return;
-      if (el.scrollLeft < setWidth * 0.5) {
-        el.scrollLeft += setWidth;
-      } else if (el.scrollLeft > setWidth * 1.5) {
-        el.scrollLeft -= setWidth;
+      const sw = setWidthRef.current;
+      if (sw <= 0) return;
+      // Fold the scroll position back into the middle set.
+      if (el.scrollLeft < sw * 0.5) {
+        el.scrollLeft += sw;
+      } else if (el.scrollLeft > sw * 1.5) {
+        el.scrollLeft -= sw;
       }
     };
 
     el.addEventListener('scroll', onScroll, { passive: true });
     return () => {
       cancelAnimationFrame(raf);
-      clearTimeout(t);
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+      ro.disconnect();
       el.removeEventListener('scroll', onScroll);
+      if (animFrameRef.current !== null) {
+        cancelAnimationFrame(animFrameRef.current);
+        animFrameRef.current = null;
+      }
     };
   }, [items.length, mobileWrap]);
 
-  // ── Mouse-only drag ───────────────────────────────────────────────
+  // ── Mouse drag ───────────────────────────────────────────────────
   useEffect(() => {
     if (!dragging) return;
 
     const onMove = (e: PointerEvent) => {
       const el = ref.current;
       if (!el || !isDragging.current) return;
-      const dx = e.clientX - startX.current;
-      if (Math.abs(dx) > 4) didMove.current = true;
-      el.scrollLeft = startScroll.current - dx;
+      // Incremental delta so a mid-drag wrap doesn't fight the pointer.
+      const dx = e.clientX - lastX.current;
+      if (Math.abs(e.clientX - startX.current) > 4) didMove.current = true;
+      lastX.current = e.clientX;
+      el.scrollLeft -= dx;
     };
 
     const onUp = () => {
@@ -87,12 +133,53 @@ export function Track({
     };
   }, [dragging]);
 
+  // ── Button scroll: rAF animation that respects the infinite wrap ─
   const scroll = (dir: number) => {
     const el = ref.current;
     if (!el) return;
+
     const firstCard = el.firstElementChild?.firstElementChild as HTMLElement | null;
     const step = (firstCard?.offsetWidth ?? 430) + 18;
-    el.scrollBy({ left: dir * step, behavior: 'smooth' });
+
+    // Cancel any in-flight animation.
+    if (animFrameRef.current !== null) {
+      cancelAnimationFrame(animFrameRef.current);
+      animFrameRef.current = null;
+    }
+
+    const sw = setWidthRef.current;
+
+    // Not wrapping (single-set track): fall back to native smooth scroll.
+    if (sw <= 0) {
+      el.scrollBy({ left: dir * step, behavior: 'smooth' });
+      return;
+    }
+
+    // Animate on a "virtual" position, then fold it into the middle set
+    // every frame. Because the content repeats every `sw`, the fold is
+    // visually seamless — the loop never runs out.
+    const startV = el.scrollLeft;
+    const delta = dir * step;
+    const duration = 420;
+    const startTime = performance.now();
+    const low = sw * 0.5;
+
+    const mapToBounds = (v: number) => {
+      const m = ((v - low) % sw + sw) % sw;
+      return m + low;
+    };
+
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - startTime) / duration);
+      const v = startV + delta * EASE_OUT_CUBIC(t);
+      el.scrollLeft = mapToBounds(v);
+      if (t < 1) {
+        animFrameRef.current = requestAnimationFrame(tick);
+      } else {
+        animFrameRef.current = null;
+      }
+    };
+    animFrameRef.current = requestAnimationFrame(tick);
   };
 
   const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -101,10 +188,15 @@ export function Track({
     if (e.button !== 0) return;
     const el = ref.current;
     if (!el) return;
+    // Kill any in-flight animation so the drag takes over immediately.
+    if (animFrameRef.current !== null) {
+      cancelAnimationFrame(animFrameRef.current);
+      animFrameRef.current = null;
+    }
     isDragging.current = true;
     didMove.current = false;
     startX.current = e.clientX;
-    startScroll.current = el.scrollLeft;
+    lastX.current = e.clientX;
     setDragging(true);
   };
 

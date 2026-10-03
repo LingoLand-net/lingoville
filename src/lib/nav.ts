@@ -22,6 +22,6 @@ export function getNavItems(t: T): NavItem[] {
 export function getUtilityNav(t: T): NavItem[] {
   return [
     { id: 'certificate', label: t('nav.certificate'), href: 'https://cert.lingo-ville.com', external: true },
-    { id: 'login',       label: t('nav.login'),       href: 'https://login.lingo-ville.com',       external: true },
+    { id: 'login',       label: t('nav.login'),       href: 'https://learn.lingo-ville.com',       external: true },
   ];
 }
