@@ -227,7 +227,7 @@ export const fr = {
         },
         {
           title: 'Préparation d’examens',
-          text: 'Préparation ciblée Cambridge, IELTS, TOEFL, DELF et DELE. Stratégie, pratique et retours honnêtes — semaine après semaine.',
+          text: 'Préparation ciblée Cambridge, IELTS et TOEFL. Stratégie, pratique et retours honnêtes — semaine après semaine.',
           meta: 'Examens internationaux',
           alt: 'Un cours de préparation d’examen',
         },
@@ -347,7 +347,7 @@ export const fr = {
         {
           category: 'Pratique',
           q: 'Quelles langues enseignez-vous ?',
-          a: 'L’anglais, le français et l’espagnol — pour les élèves et les adultes, en petits groupes. Nous préparons aussi aux examens Cambridge, IELTS, TOEFL, DELF et DELE.',
+          a: 'L’anglais, le français et l’espagnol — pour les élèves et les adultes, en petits groupes. Nous préparons aussi aux examens Cambridge, IELTS et TOEFL.',
         },
         {
           category: 'Progression',

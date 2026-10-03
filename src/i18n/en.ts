@@ -72,7 +72,7 @@ export const en = {
         titleA: 'Speak before ',
         titleEm: 'perfect.',
         titleB: '',
-        text: 'From your first words to exam-ready fluency, our small groups keep you talking. Cambridge, IELTS, TOEFL,  DELE — or just the confidence to hold a real conversation.',
+        text: 'From your first words to exam-ready fluency, our small groups keep you talking. Cambridge, IELTS, TOEFL — or just the confidence to hold a real conversation.',
         alt: 'Two adults having a relaxed conversation',
       },
       {
@@ -227,7 +227,7 @@ export const en = {
         },
         {
           title: 'Exam preparation',
-          text: 'Focused prep for Cambridge, IELTS, TOEFL,  and DELE. Strategy, practice, and honest feedback — week by week.',
+          text: 'Focused prep for Cambridge, IELTS and TOEFL. Strategy, practice, and honest feedback — week by week.',
           meta: 'International exams',
           alt: 'Exam preparation class',
         },
@@ -349,7 +349,7 @@ export const en = {
         {
           category: 'Practicalities',
           q: 'What languages do you teach?',
-          a: 'English, French, and Spanish — for school-age learners and adults, in small groups. We also prepare for Cambridge, IELTS, TOEFL,  and DELE exams.',
+          a: 'English, French, and Spanish — for school-age learners and adults, in small groups. We also prepare for Cambridge, IELTS and TOEFL.',
         },
         {
           category: 'Progress',
