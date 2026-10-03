@@ -10,7 +10,7 @@ export const fr = {
     },
     courses: {
       title: 'Cours & préparation d’examens',
-      description: 'Anglais, français et espagnol pour enfants, ados et adultes. Tous niveaux CECRL, préparation Cambridge, IELTS, TOEFL, DELF et DELE, plus cours de business et de conversation.',
+      description: 'Anglais, français et espagnol pour enfants, ados et adultes. Tous niveaux CECRL, préparation Cambridge, IELTS, TOEFL, DELF et plus cours de business et de conversation.',
     },
     contact: {
       title: 'Contact & visite',
@@ -72,7 +72,7 @@ export const fr = {
         titleA: 'Parlez avant d’être ',
         titleEm: 'parfait.',
         titleB: '',
-        text: 'Des premiers mots à la fluidité prête pour l’examen, nos petits groupes vous font parler. Cambridge, IELTS, TOEFL, DELF, DELE — ou juste la confiance de tenir une vraie conversation.',
+        text: 'Des premiers mots à la fluidité prête pour l’examen, nos petits groupes vous font parler. Cambridge, IELTS, TOEFL,  — ou juste la confiance de tenir une vraie conversation.',
         alt: 'Deux adultes en pleine conversation détendue',
       },
       {
@@ -268,7 +268,7 @@ export const fr = {
         { title: 'IELTS intensif',        weeks: '8 semaines',  meta: 'Prépa · Anglais' },
         { title: 'Préparation TOEFL',     weeks: '10 semaines', meta: 'Prépa · Anglais' },
         { title: 'DELF B2',               weeks: '12 semaines', meta: 'Prépa · Français' },
-        { title: 'DELE B2',               weeks: '12 semaines', meta: 'Prépa · Espagnol' },
+        { title: 'B2',               weeks: '12 semaines', meta: 'Prépa · Espagnol' },
         { title: 'Anglais professionnel', weeks: '6 semaines',  meta: 'Professionnel' },
         { title: 'Club de conversation',  weeks: 'En continu',  meta: 'Toutes langues' },
       ],

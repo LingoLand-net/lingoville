@@ -829,7 +829,7 @@ img { display: block; }
 }
 .verification-gif-wrap {
   border: 1px solid var(--ink);
-  border-radius: 22px;
+  border-radius: 8px;
   overflow: hidden;
   background: var(--card);
   box-shadow: 6px 7px 0 var(--ink);

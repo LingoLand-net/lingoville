@@ -236,15 +236,73 @@ function CertificateVerification() {
               </div>
             </div>
 
-            {/* Right: GIF + bouncing arrow pointing to the Certificate nav button */}
+            {/* Right: landscape GIF + styled phone mock that scales with viewport.
+                Key CSS vars (all clamped so they scale smoothly):
+                  --phone-w       72px  → 130px   (phone width)
+                  --phone-overlap  8px  →  15px   (how much it covers the landscape)
+                  --phone-top     16px  →  25px   (how far it pokes above)
+                The parent's pr is exactly (phone-w − overlap), so the phone always
+                sits flush at right-0 with the requested overlap. */}
             <div className="verification-demo">
-              <div className="verification-gif-wrap">
-                <img
-                  src="/cert-verify-demo.gif"
-                  alt={t('home.verification.gifAlt')}
-                  className="verification-gif"
-                  loading="lazy"
-                />
+              <div
+                className="relative pt-[var(--phone-top)] pr-[calc(var(--phone-w)_-_var(--phone-overlap))]"
+                style={
+                  {
+                    '--phone-w': 'clamp(72px, 18vw, 130px)',
+                    '--phone-overlap': 'clamp(8px, 1.5vw, 15px)',
+                    '--phone-top': 'clamp(16px, 2.4vw, 25px)',
+                  } as React.CSSProperties
+                }
+              >
+                {/* Landscape GIF */}
+                <div className="verification-gif-wrap">
+                  <img
+                    src="/cert-verify-demo.gif"
+                    alt={t('home.verification.gifAlt')}
+                    className="verification-gif"
+                    loading="lazy"
+                  />
+                </div>
+
+                {/* Phone mock — width var-driven, height auto-follows the parent's padding box */}
+                <div className="absolute right-0 top-0 bottom-0 w-[var(--phone-w)]">
+                  {/* Outer frame (bezel) */}
+                  <div
+                    className="relative h-full w-full border border-[var(--ink)] bg-[var(--ink)] p-[clamp(3px,0.7vw,5px)] rounded-[clamp(14px,2vw,22px)]"
+                  >
+                    {/* Side buttons (mock) */}
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute top-[16%] left-[calc(-1*clamp(2px,0.35vw,3px))] h-[clamp(12px,2vw,18px)] w-[clamp(2px,0.35vw,3px)] rounded-l-[2px] bg-[var(--ink)]"
+                    />
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute top-[24%] left-[calc(-1*clamp(2px,0.35vw,3px))] h-[clamp(16px,2.8vw,26px)] w-[clamp(2px,0.35vw,3px)] rounded-l-[2px] bg-[var(--ink)]"
+                    />
+                    <span
+                      aria-hidden="true"
+                      className="pointer-events-none absolute top-[20%] right-[calc(-1*clamp(2px,0.35vw,3px))] h-[clamp(22px,3.6vw,34px)] w-[clamp(2px,0.35vw,3px)] rounded-r-[2px] bg-[var(--ink)]"
+                    />
+
+                    {/* Screen */}
+                    <div className="relative h-full w-full overflow-hidden bg-black rounded-[clamp(10px,1.6vw,17px)]">
+                      <img
+                        src="/cert-verify-phone.gif"
+                        alt=""
+                        aria-hidden="true"
+                        draggable={false}
+                        className="pointer-events-none block h-full w-full select-none object-cover"
+                        loading="lazy"
+                      />
+
+                      {/* Dynamic island */}
+                      <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute left-1/2 -translate-x-1/2 top-[clamp(4px,0.7vw,6px)] h-[clamp(8px,1.5vw,13px)] w-[clamp(26px,5vw,42px)] rounded-full bg-[var(--ink)]"
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
